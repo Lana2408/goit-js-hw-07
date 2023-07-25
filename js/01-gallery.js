@@ -13,4 +13,34 @@ const markup = galleryItems.map(({ preview, original, description }) => `
    containerGallery.insertAdjacentHTML("beforeend", markup);
 console.log(galleryItems);
 
+const instance = basicLightbox.create(`<img src="" width="800" height="600">`, {
+  onShow: () => {
+    document.addEventListener("keydown", onEscDown);
+  },
+  onClose: () => {
+    document.removeEventListener("keydown", onEscDown);
+  },
+});
+
+function onClick(event) {
+    
+  if (event.target.nodeName !== "IMG") {
+    return;
+  }
+
+  event.preventDefault();
+
+  instance.element().querySelector("img").src = event.target.dataset.source;
+
+  instance.show();
+}
+
+containerGallery.addEventListener("click", onClick);
+
+function onEscDown(event) {
+  if (event.code === "Escape") {
+    instance.close();
+  }
+}
+
 
